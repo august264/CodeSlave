@@ -6,6 +6,14 @@
 #include "GameFramework/Pawn.h"
 #include "Employee.generated.h"
 
+UENUM(BlueprintType)
+enum class  EHealthCondition : uint8 
+{
+	EHealth_ill,
+	EHealth_weak,
+	EHealth_well_fit
+};
+
 UCLASS()
 class CODESLAVE_API AEmployee : public APawn
 {
@@ -14,6 +22,113 @@ class CODESLAVE_API AEmployee : public APawn
 public:
 	// Sets default values for this pawn's properties
 	AEmployee();
+
+private:
+	// parameters
+
+	// the salary of the employee
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Params", meta = (AllowPrivateAccess = true))
+		float salary;
+
+	// the age of the employee
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Params", meta = (AllowPrivateAccess = true))
+		int age;
+
+	// the stamina of the employee
+	UPROPERTY(VisibleAnyWhere, BlueprintReadWrite, Category = "Params", meta = (AllowPrivateAccess = true))
+		float stamina;
+
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Params", meta = (AllowPrivateAccess = true))
+		float maxStamina;
+
+	// the health condition of the employee
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Params", meta = (AllowPrivateAccess = true))
+		EHealthCondition healthCondition;
+
+	// the eyeCondition of the employee
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Params", meta = (AllowPrivateAccess = true))
+		float eyesCondition;
+
+	// the boldness of the employee, between 0(fully bold) to 1(fully not bold)
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Params", meta = (AllowPrivateAccess = true))
+		float boldness;
+
+	// the experience of the employee(years)
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Params", meta = (AllowPrivateAccess = true))
+		float exp;
+
+	// the efficiency when employee works, from 0 to 1
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Params", meta = (AllowPrivateAccess = true))
+		float efficiency;
+
+	// satisfaction, between 0 and 1
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Params", meta = (AllowPrivateAccess = true))
+		float satisfaction;
+public:
+	// getters and setters
+
+	// salary
+	UFUNCTION(BlueprintCallable)
+		float getSalary() { return this->salary; }
+	UFUNCTION(BlueprintCallable)
+		void setSalary(float newSalary) { this->salary = newSalary >= 0 ? newSalary : this->salary; }
+	
+	// age
+	UFUNCTION(BlueprintCallable)
+		int getAge() { return this->age; }
+	UFUNCTION(BlueprintCallable)
+		void setAge(int newAge);
+
+	// grow 1 year
+	UFUNCTION(BlueprintCallable)
+		void updateAge() { this->age += 1; }
+	
+
+	// stamina
+	UFUNCTION(BlueprintCallable)
+		float getStamina() { return this->stamina; }
+	UFUNCTION(BlueprintCallable)
+		void setStamina(float newStamina);
+
+	// update the stamina for a delta value,(used for decrease stamina only!!!)
+	UFUNCTION(BlueprintCallable)
+		void updateStamina(float deltaVal);
+
+	// restore the stamina
+	UFUNCTION(BlueprintCallable)
+		void restoreStamina();
+
+
+	// health condition
+	UFUNCTION(BlueprintCallable)
+		EHealthCondition getHealthCondition() { return this->healthCondition; }
+	UFUNCTION(BlueprintCallable)
+		void setHealthCondition(EHealthCondition _condition) { this->healthCondition = _condition; }
+
+	// eye condition
+	UFUNCTION(BlueprintCallable)
+		float getEyeCondition() { return this->eyesCondition; }
+	UFUNCTION(BlueprintCallable)
+		void setEyeCondition(float val) { this->eyesCondition = val; }
+
+	// boldness
+	UFUNCTION(BlueprintCallable)
+		float getBoldness() { return this->boldness; }
+	UFUNCTION(BlueprintCallable)
+		void setBoldness(float val) { this->boldness = val >= 0 && val <= 1 ? val : this->boldness; }
+
+	// experience
+	UFUNCTION(BlueprintCallable)
+		float getExperience() { return this->exp; }
+	UFUNCTION(BlueprintCallable)
+		void setExperience(float val) { this->exp = val >= 0 ? val : this->exp; }
+	UFUNCTION(BlueprintCallable)
+		void addExperience(float val) { this->exp += val > 0 ? val : 0; }
+
+	// @return the new efficiency
+	UFUNCTION(BlueprintCallable)
+		float getWorkingEfficiency() { return this->efficiency; };
+	
 
 protected:
 	// Called when the game starts or when spawned
@@ -26,6 +141,16 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	
+private:
+	// utils functions
+
+	// calculate the stamina restore efficiency based on ages
+	float getRestoreEfficiency();
+
+	// update working efficiency based on stamina
+	void updateWorkingEfficiency();
+
+	// hour sleep tracker, when weak up, reset the timer to zero, when sleep, add 1 to the timer every in game time unit
+	float sleepTimer;
 	
 };
