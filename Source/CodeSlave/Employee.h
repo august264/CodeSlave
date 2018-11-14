@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "PaperFlipbookComponent.h"
+#include "Components/BoxComponent.h"
+#include "Components/SceneComponent.h"
 #include "Employee.generated.h"
 
 UENUM(BlueprintType)
@@ -53,8 +55,25 @@ public:
 private:
 
 	// Character component
+
+	// flipbook
 	UPROPERTY(VisibleAnyWhere, BlueprintReadWrite, Category = "Avatar", meta = (AllowPrivateAccess = true))
 		UPaperFlipbookComponent* avatar;
+
+	// collision box
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Collision", meta = (AllowPrivateAccess = true))
+		UBoxComponent* collidingBox;
+
+	// scene root
+	UPROPERTY(BlueprintReadOnly, Category = "Scene", meta = (AllowPrivateAccess = true))
+		USceneComponent* sceneComponent;
+
+
+public:
+	// FORCEINLINE GET FUNCTIONS
+	FORCEINLINE class UPaperFlipbookComponent* getPaperFlipbookComponent() { return avatar; }
+	FORCEINLINE class UBoxComponent* getBoxComponent() { return collidingBox; }
+	FORCEINLINE class USceneComponent* getSceneComponent() { return sceneComponent; }
 
 private:
 	// parameters
@@ -104,8 +123,28 @@ private:
 	// satisfaction, between 0 and 1
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Params", meta = (AllowPrivateAccess = true))
 		float satisfaction;
+
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Params", meta = (AllowPrivateAccess = true))
+		float expectSalary;
+
 public:
 	// getters and setters
+
+	// expect salary
+	UFUNCTION(BlueprintCallable)
+		float getExpectSalary() { return this->expectSalary; }
+	UFUNCTION(BlueprintCallable)
+		void setExpectSalary(float _expectSalary) { this->expectSalary = _expectSalary; }
+	
+
+	// satisfaction
+	UFUNCTION(BlueprintCallable)
+		float getSatisfaction() { return this->satisfaction; }
+	UFUNCTION(BlueprintCallable)
+		void setSatisfaction(float _satisfaction) { this->satisfaction = _satisfaction; }
+	UFUNCTION(BlueprintCallable)
+		void updateSatisfaction(float averageWorkingPercentage);
+
 
 	// skills
 
@@ -177,7 +216,9 @@ public:
 		float getBoldness() { return this->boldness; }
 	UFUNCTION(BlueprintCallable)
 		void setBoldness(float val) { this->boldness = val >= 0 && val <= 1 ? val : this->boldness; }
-
+	UFUNCTION(BlueprintCallable)
+		void updateBoldness(float averageWorkingHr);
+	
 	// experience
 	UFUNCTION(BlueprintCallable)
 		float getExperience() { return this->exp; }

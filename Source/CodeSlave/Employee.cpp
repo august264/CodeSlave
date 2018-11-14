@@ -8,6 +8,11 @@ AEmployee::AEmployee()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	this->sceneComponent = CreateDefaultSubobject<USceneComponent>("root");
+	//this->SetRootComponent(this->sceneComponent);
+
+	// animation
 	this->avatar = CreateOptionalDefaultSubobject<UPaperFlipbookComponent>("avatar");
 	if (this->avatar)
 	{
@@ -18,13 +23,26 @@ AEmployee::AEmployee()
 		avatar->PrimaryComponentTick.TickGroup = TG_PrePhysics;
 		avatar->bGenerateOverlapEvents = true;
 	}
+
+	this->avatar->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
+
+	// collision box
+	this->collidingBox = CreateOptionalDefaultSubobject<UBoxComponent>("CollsionBox");
+
+	this->collidingBox->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
+	
+
+	// disable all rotations
+	this->bUseControllerRotationYaw = false;
+	this->bUseControllerRotationPitch = false;
+	this->bUseControllerRotationRoll = false;
 }
 
 AEmployee::AEmployee(EBodyCondition _bCon, EHealthCondition _hCon, int _age, float _maxStamina, float exp, TArray<ESkill> _skills)
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	//
+	// flipbook component init
 	this->avatar = CreateOptionalDefaultSubobject<UPaperFlipbookComponent>("avatar");
 	if (this->avatar) 
 	{
@@ -36,6 +54,11 @@ AEmployee::AEmployee(EBodyCondition _bCon, EHealthCondition _hCon, int _age, flo
 		avatar->bGenerateOverlapEvents = true;
 	}
 
+	// disable all rotations
+	this->bUseControllerRotationYaw = false;
+	this->bUseControllerRotationPitch = false;
+	this->bUseControllerRotationRoll = false;
+
 	// parameter set
 	setBodyCondition(_bCon);
 	setHealthCondition(_hCon);
@@ -46,6 +69,11 @@ AEmployee::AEmployee(EBodyCondition _bCon, EHealthCondition _hCon, int _age, flo
 	this->skills.Append(_skills);
 	this->satisfaction = FMath::RandRange(0.5f, 0.8f);
 
+}
+
+void AEmployee::updateSatisfaction(float averageWorkingPercentage)
+{
+	this->satisfaction = (salary / expectSalary) * 0.5f + (1 - averageWorkingPercentage)*0.5f;
 }
 
 bool AEmployee::removeSkill(ESkill skill)
@@ -108,6 +136,11 @@ void AEmployee::restoreStamina()
 	{
 		this->stamina += restoration;
 	}
+}
+
+void AEmployee::updateBoldness(float averageWorkingHr)
+{
+	this->boldness = FMath::Pow(averageWorkingHr, 2) / (105 - this->age) + 5;
 }
 
 // Called when the game starts or when spawned
