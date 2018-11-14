@@ -8,7 +8,66 @@ AEmployee::AEmployee()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	this->avatar = CreateOptionalDefaultSubobject<UPaperFlipbookComponent>("avatar");
+	if (this->avatar)
+	{
+		avatar->AlwaysLoadOnClient = true;
+		avatar->AlwaysLoadOnServer = true;
+		avatar->bOwnerNoSee = false;
+		avatar->bAffectDynamicIndirectLighting = true;
+		avatar->PrimaryComponentTick.TickGroup = TG_PrePhysics;
+		avatar->bGenerateOverlapEvents = true;
+	}
+}
 
+AEmployee::AEmployee(EBodyCondition _bCon, EHealthCondition _hCon, int _age, float _maxStamina, float exp, TArray<ESkill> _skills)
+{
+	PrimaryActorTick.bCanEverTick = true;
+
+	//
+	this->avatar = CreateOptionalDefaultSubobject<UPaperFlipbookComponent>("avatar");
+	if (this->avatar) 
+	{
+		avatar->AlwaysLoadOnClient = true;
+		avatar->AlwaysLoadOnServer = true;
+		avatar->bOwnerNoSee = false;
+		avatar->bAffectDynamicIndirectLighting = true;
+		avatar->PrimaryComponentTick.TickGroup = TG_PrePhysics;
+		avatar->bGenerateOverlapEvents = true;
+	}
+
+	// parameter set
+	setBodyCondition(_bCon);
+	setHealthCondition(_hCon);
+	setAge(_age);
+	setMaximumStamina(_maxStamina);
+	setStamina(_maxStamina);
+	setExperience(exp);
+	this->skills.Append(_skills);
+	this->satisfaction = FMath::RandRange(0.5f, 0.8f);
+
+}
+
+bool AEmployee::removeSkill(ESkill skill)
+{
+	bool val = this->skills.Contains(skill);
+
+	if (!val)
+		return false;
+
+	this->skills.Remove(skill);
+	return true;
+}
+
+bool AEmployee::addSkill(ESkill skill)
+{
+	int val = this->skills.Contains(skill);
+
+	if (val)
+		return false;
+
+	this->skills.AddUnique(skill);
+	return true;
 }
 
 void AEmployee::setAge(int newAge)
@@ -18,7 +77,7 @@ void AEmployee::setAge(int newAge)
 
 void AEmployee::setStamina(float newStamina)
 {
-	this->stamina = newStamina >= 0 ? newStamina : this->stamina;
+	this->stamina = newStamina >= 0 && newStamina <= maxStamina ? newStamina : this->stamina;
 	updateWorkingEfficiency();
 }
 

@@ -4,14 +4,40 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "PaperFlipbookComponent.h"
 #include "Employee.generated.h"
 
 UENUM(BlueprintType)
 enum class  EHealthCondition : uint8 
 {
 	EHealth_ill,
-	EHealth_weak,
-	EHealth_well_fit
+	EHealth_health,
+	EHealth_NULL
+};
+
+UENUM(BlueprintType)
+enum class EBodyCondition : uint8
+{
+	EBody_weak,
+	EBody_healthy,
+	EBody_fit,
+	EBody_NULL
+};
+
+UENUM(BlueprintType)
+enum class ESkill :uint8
+{
+	E_SKILL_SQL,
+	E_SKILL_CPP,
+	E_SKILL_C_SHARP,
+	E_SKILL_PYTHON,
+	E_SKILL_RUBY,
+	E_SKILL_JAVA,
+	E_SKILL_JAVASCRIPT,
+	E_SKILL_PHP,
+	E_SKILL_IOS,
+	E_SKILL_NULL
+
 };
 
 UCLASS()
@@ -23,8 +49,19 @@ public:
 	// Sets default values for this pawn's properties
 	AEmployee();
 
+	AEmployee(EBodyCondition _bCon, EHealthCondition _hCon, int _age, float _maxStamina, float exp, TArray<ESkill> _skills);
+private:
+
+	// Character component
+	UPROPERTY(VisibleAnyWhere, BlueprintReadWrite, Category = "Avatar", meta = (AllowPrivateAccess = true))
+		UPaperFlipbookComponent* avatar;
+
 private:
 	// parameters
+
+	// skills
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Params", meta = (AllowPrivateAccess = true))
+		TArray<ESkill> skills;
 
 	// the salary of the employee
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Params", meta = (AllowPrivateAccess = true))
@@ -44,6 +81,9 @@ private:
 	// the health condition of the employee
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Params", meta = (AllowPrivateAccess = true))
 		EHealthCondition healthCondition;
+
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Params", meta = (AllowPrivateAccess = true))
+		EBodyCondition bodyCondition;
 
 	// the eyeCondition of the employee
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Params", meta = (AllowPrivateAccess = true))
@@ -67,6 +107,23 @@ private:
 public:
 	// getters and setters
 
+	// skills
+
+	// remove certain skill
+	// @return: if the skill is successfully removed return true, else return false;
+	UFUNCTION(BlueprintCallable)
+		bool removeSkill(ESkill skill);
+	// add certain skill
+	// @return: if the skill is successfully added return true, else return false;
+	UFUNCTION(BlueprintCallable)
+		bool addSkill(ESkill skill);
+
+	// bodyCondition
+	UFUNCTION(BlueprintCallable)
+		void setBodyCondition(EBodyCondition condition) { this->bodyCondition = condition; }
+	UFUNCTION(BlueprintCallable)
+		EBodyCondition getBodyCondition() { return this->bodyCondition; }
+
 	// salary
 	UFUNCTION(BlueprintCallable)
 		float getSalary() { return this->salary; }
@@ -85,6 +142,10 @@ public:
 	
 
 	// stamina
+	UFUNCTION(BlueprintCallable)
+		void setMaximumStamina(float max) { this->maxStamina = max > 0 ? max : 0; }
+	UFUNCTION(BlueprintCallable)
+		float getMaximumStamina() { return this->maxStamina; }
 	UFUNCTION(BlueprintCallable)
 		float getStamina() { return this->stamina; }
 	UFUNCTION(BlueprintCallable)
