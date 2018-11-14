@@ -71,6 +71,11 @@ AEmployee::AEmployee(EBodyCondition _bCon, EHealthCondition _hCon, int _age, flo
 
 }
 
+void AEmployee::updateSatisfaction(float averageWorkingPercentage)
+{
+	this->satisfaction = (salary / expectSalary) * 0.5f + (1 - averageWorkingPercentage)*0.5f;
+}
+
 bool AEmployee::removeSkill(ESkill skill)
 {
 	bool val = this->skills.Contains(skill);
@@ -131,6 +136,11 @@ void AEmployee::restoreStamina()
 	{
 		this->stamina += restoration;
 	}
+}
+
+void AEmployee::updateBoldness(float averageWorkingHr)
+{
+	this->boldness = FMath::Pow(averageWorkingHr, 2) / (105 - this->age) + 5;
 }
 
 // Called when the game starts or when spawned
