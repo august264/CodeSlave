@@ -8,6 +8,11 @@ AEmployee::AEmployee()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	this->sceneComponent = CreateDefaultSubobject<USceneComponent>("root");
+	//this->SetRootComponent(this->sceneComponent);
+
+	// animation
 	this->avatar = CreateOptionalDefaultSubobject<UPaperFlipbookComponent>("avatar");
 	if (this->avatar)
 	{
@@ -18,6 +23,14 @@ AEmployee::AEmployee()
 		avatar->PrimaryComponentTick.TickGroup = TG_PrePhysics;
 		avatar->bGenerateOverlapEvents = true;
 	}
+
+	this->avatar->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
+
+	// collision box
+	this->collidingBox = CreateOptionalDefaultSubobject<UBoxComponent>("CollsionBox");
+
+	this->collidingBox->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
+	
 
 	// disable all rotations
 	this->bUseControllerRotationYaw = false;

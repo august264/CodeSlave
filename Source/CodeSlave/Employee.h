@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "PaperFlipbookComponent.h"
+#include "Components/BoxComponent.h"
+#include "Components/SceneComponent.h"
 #include "Employee.generated.h"
 
 UENUM(BlueprintType)
@@ -53,11 +55,25 @@ public:
 private:
 
 	// Character component
+
+	// flipbook
 	UPROPERTY(VisibleAnyWhere, BlueprintReadWrite, Category = "Avatar", meta = (AllowPrivateAccess = true))
 		UPaperFlipbookComponent* avatar;
 
+	// collision box
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Collision", meta = (AllowPrivateAccess = true))
+		UBoxComponent* collidingBox;
+
+	// scene root
+	UPROPERTY(BlueprintReadOnly, Category = "Scene", meta = (AllowPrivateAccess = true))
+		USceneComponent* sceneComponent;
+
+
 public:
+	// FORCEINLINE GET FUNCTIONS
 	FORCEINLINE class UPaperFlipbookComponent* getPaperFlipbookComponent() { return avatar; }
+	FORCEINLINE class UBoxComponent* getBoxComponent() { return collidingBox; }
+	FORCEINLINE class USceneComponent* getSceneComponent() { return sceneComponent; }
 
 private:
 	// parameters
