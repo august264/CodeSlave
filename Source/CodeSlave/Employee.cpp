@@ -18,13 +18,18 @@ AEmployee::AEmployee()
 		avatar->PrimaryComponentTick.TickGroup = TG_PrePhysics;
 		avatar->bGenerateOverlapEvents = true;
 	}
+
+	// disable all rotations
+	this->bUseControllerRotationYaw = false;
+	this->bUseControllerRotationPitch = false;
+	this->bUseControllerRotationRoll = false;
 }
 
 AEmployee::AEmployee(EBodyCondition _bCon, EHealthCondition _hCon, int _age, float _maxStamina, float exp, TArray<ESkill> _skills)
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	//
+	// flipbook component init
 	this->avatar = CreateOptionalDefaultSubobject<UPaperFlipbookComponent>("avatar");
 	if (this->avatar) 
 	{
@@ -35,6 +40,11 @@ AEmployee::AEmployee(EBodyCondition _bCon, EHealthCondition _hCon, int _age, flo
 		avatar->PrimaryComponentTick.TickGroup = TG_PrePhysics;
 		avatar->bGenerateOverlapEvents = true;
 	}
+
+	// disable all rotations
+	this->bUseControllerRotationYaw = false;
+	this->bUseControllerRotationPitch = false;
+	this->bUseControllerRotationRoll = false;
 
 	// parameter set
 	setBodyCondition(_bCon);

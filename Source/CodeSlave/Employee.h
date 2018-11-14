@@ -56,6 +56,9 @@ private:
 	UPROPERTY(VisibleAnyWhere, BlueprintReadWrite, Category = "Avatar", meta = (AllowPrivateAccess = true))
 		UPaperFlipbookComponent* avatar;
 
+public:
+	FORCEINLINE class UPaperFlipbookComponent* getPaperFlipbookComponent() { return avatar; }
+
 private:
 	// parameters
 
