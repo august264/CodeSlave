@@ -36,6 +36,17 @@ AEmployee::AEmployee()
 	this->bUseControllerRotationYaw = false;
 	this->bUseControllerRotationPitch = false;
 	this->bUseControllerRotationRoll = false;
+
+	// Random generate params
+	this->setBodyCondition(EBodyCondition(FMath::RandRange(0, 2)));
+	this->setAge(FMath::RandRange(18, 60));
+	this->setHealthCondition(EHealthCondition(FMath::RandRange(0, 1)));
+	this->setExperience(FMath::RandRange(0, 16));
+	this->addSkill(ESkill(FMath::RandRange(0, 8)));
+	this->addSkill(ESkill(FMath::RandRange(0, 8)));
+	this->addSkill(ESkill(FMath::RandRange(0, 8)));
+	this->addSkill(ESkill(FMath::RandRange(0, 8)));
+	this->satisfaction = FMath::RandRange(0.5f, 0.8f);
 }
 
 AEmployee::AEmployee(EBodyCondition _bCon, EHealthCondition _hCon, int _age, float _maxStamina, float exp, TArray<ESkill> _skills)
