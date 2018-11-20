@@ -66,6 +66,7 @@ void ASpectatorCamera::BeginPlay()
 {
 	Super::BeginPlay();
 
+	UE_LOG(LogTemp, Log, TEXT("Begin Play!"));
 	// Acquire the player controller at the begin of the play
 	this->playerController = UGameplayStatics::GetPlayerController((UObject*)GetWorld(), 0);
 	EnableInput(this->playerController);
