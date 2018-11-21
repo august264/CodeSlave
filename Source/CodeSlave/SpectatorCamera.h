@@ -72,4 +72,7 @@ public:
 	// toggle the boolean variable to indicate whether the mid mouse button is pressed
 	UFUNCTION(blueprintCallable)
 		void toggleMidButtonPress() { this->mouseMidButtonPressed = !this->mouseMidButtonPressed; }
+
+	UFUNCTION(blueprintCallable)
+		void updateMousePosition();
 };

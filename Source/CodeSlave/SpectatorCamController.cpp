@@ -7,6 +7,11 @@ ASpectatorCamController::ASpectatorCamController()
 {
 }
 
+void ASpectatorCamController::BeginPlay() 
+{
+	bShowMouseCursor = true;
+}
+
 void ASpectatorCamController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
@@ -22,6 +27,7 @@ void ASpectatorCamController::midMousePressed()
 	UE_LOG(LogTemp, Log, TEXT("mouse mid button pressed."));
 	ASpectatorCamera* cam = (ASpectatorCamera*)Super::GetPawn();
 	cam->toggleMidButtonPress();
+	cam->updateMousePosition();
 }
 
 void ASpectatorCamController::midMouseReleased()

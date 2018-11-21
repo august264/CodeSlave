@@ -17,6 +17,8 @@ class CODESLAVE_API ASpectatorCamController : public APlayerController
 public:
 	ASpectatorCamController();
 
+	virtual void BeginPlay() override;
+
 protected:
 	virtual void SetupInputComponent() override;
 

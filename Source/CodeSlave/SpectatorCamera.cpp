@@ -118,6 +118,25 @@ void ASpectatorCamera::DragCamera(FVector deltaPos)
 	SetActorLocation(newLocation);
 }
 
+void ASpectatorCamera::updateMousePosition()
+{
+	// Create Vector to hold the mouse position
+	FVector2D mousePos;
+	FVector2D viewportSize;
+	// get ViewPort
+	UGameViewportClient* viewport = GEngine->GameViewport;
+
+	check(viewport);
+
+	viewport->GetViewportSize(viewportSize);
+
+	// make sure the viewport is focus
+	if (viewport->IsFocused(viewport->Viewport) && viewport->GetMousePosition(mousePos))
+	{
+		this->mouseOriginalPos = mousePos;
+	}
+}
+
 
 
 
