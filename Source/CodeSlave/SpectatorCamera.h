@@ -31,6 +31,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Panning Params", meta = (AllowPrivateAccess = "true"))
 	float CameraPanningSpeed;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+		class USceneComponent* scene;
+
 	bool mouseMidButtonPressed;
 	
 public:
@@ -42,20 +45,14 @@ public:
 	virtual void BeginPlay() override;
 
 protected:
-	// Herererererererere
-	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
-	void PerfromTestFunction();
+
 
 private:
 	void MoveCameraRight(float deltaMovement);
 	void MoveCameraUp(float deltaMovement);
-	void DragCamera(FVector deltaPos);
 
-public:
-	UFUNCTION()
-	void MiddleButtonPressed();
-	UFUNCTION()
-	void MiddleButtonReleased();
+
+
 
 private:
 
@@ -67,7 +64,12 @@ public:
 
 	FORCEINLINE class UCameraComponent* GetTopDownCameraComponent() const { return TopDownCameraComponent; }
 
-protected:
-	APlayerController * playerController;
+public:
 
+	UFUNCTION(blueprintCallable)
+		void DragCamera(FVector deltaPos);
+
+	// toggle the boolean variable to indicate whether the mid mouse button is pressed
+	UFUNCTION(blueprintCallable)
+		void toggleMidButtonPress() { this->mouseMidButtonPressed = !this->mouseMidButtonPressed; }
 };

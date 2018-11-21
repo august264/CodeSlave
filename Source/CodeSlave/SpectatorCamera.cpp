@@ -4,17 +4,22 @@
 #include "Components/InputComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "GameFramework/PlayerController.h"
 #include "Engine/GameViewportClient.h"
+#include "Components/SceneComponent.h"
 #include "Engine.h"
 
 
 
 ASpectatorCamera::ASpectatorCamera()
 {
+	PrimaryActorTick.bCanEverTick = true;
+
+	this->scene = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+	RootComponent = this->scene;
+
 	TopDownCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("TopDownCamera"));
 	TopDownCameraComponent->ProjectionMode = ECameraProjectionMode::Orthographic;
-	TopDownCameraComponent->OrthoWidth = 1024.0f;
+	TopDownCameraComponent->OrthoWidth = 720.0f;
 	TopDownCameraComponent->SetupAttachment(RootComponent);
 
 	TopDownCameraComponent->bUsePawnControlRotation = false;
@@ -22,10 +27,8 @@ ASpectatorCamera::ASpectatorCamera()
 
 	TopDownCameraComponent->AspectRatio = (double)(38 / 30);
 
-	this->CameraScrollBoundary = 25.0f;
-	this->CameraPanningSpeed = 1.0f;
-
-	PrimaryActorTick.bCanEverTick = true;
+	this->CameraScrollBoundary = 50.0f;
+	this->CameraPanningSpeed = 80.0f;
 
 	this->mouseMidButtonPressed = false;
 
@@ -90,20 +93,6 @@ void ASpectatorCamera::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UE_LOG(LogTemp, Log, TEXT("Begin Play!"));
-	// Acquire the player controller at the begin of the play
-	this->playerController = UGameplayStatics::GetPlayerController((UObject*)GetWorld(), 0);
-	EnableInput(this->playerController);
-}
-
-void ASpectatorCamera::SetupPlayerInputComponent(class UInputComponent* InputComponent)
-{
-	//Super::SetupPlayerInputComponent(InputComponent);
-
-	check(InputComponent);
-	InputComponent->BindAction("TestFunction", IE_Pressed, this, &ASpectatorCamera::PerfromTestFunction);
-	InputComponent->BindAction("MiddleButtonPressed", IE_Pressed, this, &ASpectatorCamera::MiddleButtonPressed);
-	InputComponent->BindAction("MiddleButtonReleased", IE_Released, this, &ASpectatorCamera::MiddleButtonReleased);
 }
 
 void ASpectatorCamera::MoveCameraRight(float deltaMovement)
@@ -129,37 +118,9 @@ void ASpectatorCamera::DragCamera(FVector deltaPos)
 	SetActorLocation(newLocation);
 }
 
-void ASpectatorCamera::MiddleButtonPressed()
-{
-	//Hererererererere
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Hello!")));
 
-	UE_LOG(LogTemp, Log, TEXT("Middle mouse pressed = True"));
-	FVector2D viewportSize;
 
-	this->mouseMidButtonPressed = true;
 
-	UGameViewportClient* viewport = GEngine->GameViewport;
-
-	check(viewport);
-
-	viewport->GetViewportSize(viewportSize);
-
-	viewport->GetMousePosition(mouseOriginalPos);
-	
-}
-
-void ASpectatorCamera::MiddleButtonReleased() 
-{
-	UE_LOG(LogTemp, Log, TEXT("Middle mouse pressed = False"));
-	this->mouseMidButtonPressed = false;
-}
-
-//Herererererererere
-void ASpectatorCamera::PerfromTestFunction() {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("TestFunction!")));
-	
-}
 
 
 
