@@ -8,6 +8,30 @@
 #include "Engine/GameViewportClient.h"
 #include "Engine.h"
 
+
+
+ASpectatorCamera::ASpectatorCamera()
+{
+	TopDownCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("TopDownCamera"));
+	TopDownCameraComponent->ProjectionMode = ECameraProjectionMode::Orthographic;
+	TopDownCameraComponent->OrthoWidth = 1024.0f;
+	TopDownCameraComponent->SetupAttachment(RootComponent);
+
+	TopDownCameraComponent->bUsePawnControlRotation = false;
+	TopDownCameraComponent->bAutoActivate = true;
+
+	TopDownCameraComponent->AspectRatio = (double)(38 / 30);
+
+	this->CameraScrollBoundary = 25.0f;
+	this->CameraPanningSpeed = 1.0f;
+
+	PrimaryActorTick.bCanEverTick = true;
+
+	this->mouseMidButtonPressed = false;
+
+
+}
+
 void ASpectatorCamera::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
@@ -72,11 +96,14 @@ void ASpectatorCamera::BeginPlay()
 	EnableInput(this->playerController);
 }
 
-void ASpectatorCamera::SetupPlayerInputComponent(UInputComponent * InputComponent)
+void ASpectatorCamera::SetupPlayerInputComponent(class UInputComponent* InputComponent)
 {
-	Super::SetupPlayerInputComponent(InputComponent);
-	InputComponent->BindAction("MiddleButtonPressed", EInputEvent::IE_Pressed, this, &ASpectatorCamera::MiddleButtonPressed);
-	InputComponent->BindAction("MiddleButtonReleased", EInputEvent::IE_Released, this, &ASpectatorCamera::MiddleButtonReleased);
+	//Super::SetupPlayerInputComponent(InputComponent);
+
+	check(InputComponent);
+	InputComponent->BindAction("TestFunction", IE_Pressed, this, &ASpectatorCamera::PerfromTestFunction);
+	InputComponent->BindAction("MiddleButtonPressed", IE_Pressed, this, &ASpectatorCamera::MiddleButtonPressed);
+	InputComponent->BindAction("MiddleButtonReleased", IE_Released, this, &ASpectatorCamera::MiddleButtonReleased);
 }
 
 void ASpectatorCamera::MoveCameraRight(float deltaMovement)
@@ -104,6 +131,9 @@ void ASpectatorCamera::DragCamera(FVector deltaPos)
 
 void ASpectatorCamera::MiddleButtonPressed()
 {
+	//Hererererererere
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Hello!")));
+
 	UE_LOG(LogTemp, Log, TEXT("Middle mouse pressed = True"));
 	FVector2D viewportSize;
 
@@ -125,25 +155,11 @@ void ASpectatorCamera::MiddleButtonReleased()
 	this->mouseMidButtonPressed = false;
 }
 
-
-ASpectatorCamera::ASpectatorCamera()
-{
-	TopDownCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("TopDownCamera"));
-	TopDownCameraComponent->ProjectionMode = ECameraProjectionMode::Orthographic;
-	TopDownCameraComponent->OrthoWidth = 1024.0f;
-	TopDownCameraComponent->SetupAttachment(RootComponent);
-
-	TopDownCameraComponent->bUsePawnControlRotation = false;
-	TopDownCameraComponent->bAutoActivate = true;
-
-	TopDownCameraComponent->AspectRatio = (double)(38 / 30);
-
-	this->CameraScrollBoundary = 25.0f;
-	this->CameraPanningSpeed = 1.0f;
+//Herererererererere
+void ASpectatorCamera::PerfromTestFunction() {
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("TestFunction!")));
 	
-	PrimaryActorTick.bCanEverTick = true;
-	
-	this->mouseMidButtonPressed = false;
-
-
 }
+
+
+

@@ -6,6 +6,11 @@
 #include "GameFramework/SpectatorPawn.h"
 #include "SpectatorCamera.generated.h"
 
+
+//Hererererererere
+class UInputComponent;
+
+
 /**
  * 
  */
@@ -21,22 +26,25 @@ private:
 	class UCameraComponent* TopDownCameraComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Panning Params", meta = (AllowPrivateAccess = "true"))
-		float CameraScrollBoundary;
+	float CameraScrollBoundary;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Panning Params", meta = (AllowPrivateAccess = "true"))
-		float CameraPanningSpeed;
+	float CameraPanningSpeed;
 
 	bool mouseMidButtonPressed;
 	
 public:
+
+	
 
 	virtual void Tick(float DeltaSeconds) override;
 
 	virtual void BeginPlay() override;
 
 protected:
-
-	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
+	// Herererererererere
+	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
+	void PerfromTestFunction();
 
 private:
 	void MoveCameraRight(float deltaMovement);
