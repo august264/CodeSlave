@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(meta = (BlueprintSpawnableComponent))
 class CODESLAVE_API ULvlPaperSpriteComponent : public UPaperSpriteComponent
 {
 	GENERATED_BODY()
