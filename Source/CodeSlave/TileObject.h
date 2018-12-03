@@ -16,7 +16,15 @@ private:
 	// indicate whether other object can be overlapped onto this tile
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TileSettings, meta = (AllowPrivateAccess = true))
 		bool bAllowTileOverlap;
-	
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Scene, meta = (AllowPrivateAccess = true))
+		class USceneComponent* rootScene;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Sprite, meta = (AllowPrivateAccess = true))
+		class ULvlPaperSpriteComponent* sprite;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Box, meta = (AllowPrivateAccess = true))
+		class UBoxComponent* box;
 
 public:	
 	// Sets default values for this actor's properties

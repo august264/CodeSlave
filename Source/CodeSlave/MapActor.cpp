@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "MapActor.h"
+#include "Engine.h"
 
 
 // Sets default values
@@ -9,7 +10,6 @@ AMapActor::AMapActor()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	mapData = TArray<FMapData_Row>();
-	tileObjects = TMap<FString, FTile>();
 	baseTileSizeX = 0;
 	baseTileSizeY = 0;
 	mapSizeX = 0;
@@ -103,6 +103,7 @@ void AMapActor::GenerateMap()
 void AMapActor::spawnTile_Implementation()
 {
 	UE_LOG(LogTemp, Log, TEXT("Spawn Tile Actor from blueprint"));
+
 }
 
 // Called every frame

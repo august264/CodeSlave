@@ -8,25 +8,25 @@
 #include "MapActor.generated.h"
 
 
-USTRUCT(BlueprintType)
-struct FTile 
-{
-	GENERATED_BODY()
+//USTRUCT(BlueprintType)
+//struct FTile 
+//{
+//	GENERATED_BODY()
+//
+//public:
+//	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+//	FName tileName;
+//
+//	UPROPERTY(BlueprintReadWrite)
+//	 object;
+//};
 
-public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FName tileName;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	TSubclassOf<ATileObject> object;
-};
-
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, Blueprintable)
 struct FMapData_Row
 {
 	GENERATED_BODY()
 	// the key to access the TileObject
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<FString> MapRow;
 };
 
@@ -36,12 +36,15 @@ class CODESLAVE_API AMapActor : public AActor
 	GENERATED_BODY()
 
 private:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = mapData, meta = (AllowPrivateAccess = true))
+		TArray<ATileObject*> spawnedActorManager;
+
 	// Need to set for editable to overcome a UE4 bug.
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = mapData, meta = (AllowPrivateAccess = true, DisplayName = "Map Data (Do not edit !! Detail in c++ file)"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = mapData, meta = (AllowPrivateAccess = true, DisplayName = "Map Data (Do not edit !! Detail in c++ file)"))
 		TArray<FMapData_Row> mapData;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = mapData, meta = (AllowPrivateAccess = true))
-		TMap<FString, FTile> tileObjects;
+		TMap<FString, TSubclassOf<ATileObject>> tileObjects;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = mapData, meta = (AllowPrivateAccess = true))
 		float baseTileSizeX;
@@ -67,7 +70,7 @@ protected:
 	UFUNCTION(BlueprintCallable)
 		void GenerateMap();
 
-	UFUNCTION(BlueprintNativeEvent)
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 		void spawnTile();
 
 	virtual void spawnTile_Implementation();
