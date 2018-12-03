@@ -7,6 +7,7 @@
 #include "PaperFlipbookComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/SceneComponent.h"
+#include "LvlPaperSpriteComponent.h"
 #include "Employee.generated.h"
 
 UENUM(BlueprintType)
@@ -51,14 +52,40 @@ public:
 	// Sets default values for this pawn's properties
 	AEmployee();
 
-	AEmployee(EBodyCondition _bCon, EHealthCondition _hCon, int _age, float _maxStamina, float exp, TArray<ESkill> _skills);
 private:
 
 	// Character component
 
 	// flipbook
 	UPROPERTY(VisibleAnyWhere, BlueprintReadWrite, Category = "Avatar", meta = (AllowPrivateAccess = true))
-		UPaperFlipbookComponent* avatar;
+		UPaperFlipbookComponent* MotionAvatar;
+
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Avatar", meta = (AllowPrivateAccess = true))
+		UPaperFlipbook* MotionUp;
+
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Avatar", meta = (AllowPrivateAccess = true))
+		UPaperFlipbook* MotionDown;
+
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Avatar", meta = (AllowPrivateAccess = true))
+		UPaperFlipbook* MotionLeft;
+
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Avatar", meta = (AllowPrivateAccess = true))
+		UPaperFlipbook* MotionRight;
+
+	UPROPERTY(VisibleAnyWhere, BlueprintReadWrite, Category = "Avatar", meta = (AllowPrivateAccess = true))
+		ULvlPaperSpriteComponent* StaticAvatar;
+
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Avatar", meta = (AllowPrivateAccess = true))
+		UPaperSprite* StaticUp;
+
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Avatar", meta = (AllowPrivateAccess = true))
+		UPaperSprite* StaticDown;
+
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Avatar", meta = (AllowPrivateAccess = true))
+		UPaperSprite* StaticLeft;
+
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Avatar", meta = (AllowPrivateAccess = true))
+		UPaperSprite* StaticRight;
 
 	// collision box
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Collision", meta = (AllowPrivateAccess = true))
@@ -71,11 +98,20 @@ private:
 
 public:
 	// FORCEINLINE GET FUNCTIONS
-	FORCEINLINE class UPaperFlipbookComponent* getPaperFlipbookComponent() { return avatar; }
+	FORCEINLINE class UPaperFlipbookComponent* getPaperFlipbookComponent() { return MotionAvatar; }
+	FORCEINLINE class ULvlPaperSpriteComponent* getPaperSpriteComponent() { return StaticAvatar; }
 	FORCEINLINE class UBoxComponent* getBoxComponent() { return collidingBox; }
 	FORCEINLINE class USceneComponent* getSceneComponent() { return sceneComponent; }
 
 private:
+
+	bool inMotion;
+
+	FVector originalPositon;
+
+	UFUNCTION(BlueprintCallable) 
+		void setInMotion(bool val) { inMotion = val; }
+
 	// parameters
 
 	// skills
@@ -144,6 +180,19 @@ public:
 		void setSatisfaction(float _satisfaction) { this->satisfaction = _satisfaction; }
 	UFUNCTION(BlueprintCallable)
 		void updateSatisfaction(float averageWorkingPercentage);
+
+	// Set the character facing rightward(static)
+	UFUNCTION(BlueprintCallable)
+		void CharacterFaceRight();
+	// Set the character facing leftward(static)
+	UFUNCTION(BlueprintCallable)
+		void CharacterFaceLeft();
+	// Set the character facing upward(static)
+	UFUNCTION(BlueprintCallable)
+		void CharacterFaceUp();
+	// Set the character facing downward(static)
+	UFUNCTION(BlueprintCallable)
+		void CharacterFaceDown();
 
 
 	// skills

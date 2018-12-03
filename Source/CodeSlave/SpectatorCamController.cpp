@@ -9,7 +9,21 @@ ASpectatorCamController::ASpectatorCamController()
 
 void ASpectatorCamController::BeginPlay() 
 {
+	Super::BeginPlay();
 	bShowMouseCursor = true;
+}
+
+void ASpectatorCamController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+}
+
+void ASpectatorCamController::setObjToBuild(ATileObject * obj)
+{
+	this->objToBuild = obj;
+	this->objToBuild->GetPaperSpriteComponent()->SetSpriteColor(FLinearColor::Green);
+	this->pendingObjectToBuild = true;
 }
 
 void ASpectatorCamController::SetupInputComponent()

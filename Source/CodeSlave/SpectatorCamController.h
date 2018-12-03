@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "TileObject.h"
 #include "SpectatorCamController.generated.h"
 
 /**
@@ -19,6 +20,16 @@ public:
 
 	virtual void BeginPlay() override;
 
+	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION(BlueprintCallable)
+		void setObjToBuild(ATileObject* obj);
+
+protected:
+	bool pendingObjectToBuild;
+
+	ATileObject* objToBuild;
+
 protected:
 	virtual void SetupInputComponent() override;
 
@@ -26,4 +37,5 @@ private:
 	void midMousePressed();
 
 	void midMouseReleased();
+
 };

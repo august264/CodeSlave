@@ -17,10 +17,10 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TileSettings, meta = (AllowPrivateAccess = true))
 		bool bAllowTileOverlap;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Scene, meta = (AllowPrivateAccess = true))
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Scene, meta = (AllowPrivateAccess = true))
 		class USceneComponent* rootScene;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Sprite, meta = (AllowPrivateAccess = true))
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Sprite, meta = (AllowPrivateAccess = true))
 		class ULvlPaperSpriteComponent* sprite;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Box, meta = (AllowPrivateAccess = true))
@@ -29,6 +29,8 @@ private:
 public:	
 	// Sets default values for this actor's properties
 	ATileObject();
+
+	FORCEINLINE ULvlPaperSpriteComponent* GetPaperSpriteComponent() { return this->sprite; }
 
 protected:
 	// Called when the game starts or when spawned

@@ -11,20 +11,35 @@ AEmployee::AEmployee()
 
 	this->sceneComponent = CreateDefaultSubobject<USceneComponent>("root");
 	//this->SetRootComponent(this->sceneComponent);
+	inMotion = false;
 
 	// animation
-	this->avatar = CreateOptionalDefaultSubobject<UPaperFlipbookComponent>("avatar");
-	if (this->avatar)
+	this->MotionAvatar = CreateOptionalDefaultSubobject<UPaperFlipbookComponent>("avatar");
+	if (this->MotionAvatar)
 	{
-		avatar->AlwaysLoadOnClient = true;
-		avatar->AlwaysLoadOnServer = true;
-		avatar->bOwnerNoSee = false;
-		avatar->bAffectDynamicIndirectLighting = true;
-		avatar->PrimaryComponentTick.TickGroup = TG_PrePhysics;
-		avatar->bGenerateOverlapEvents = true;
+		MotionAvatar ->AlwaysLoadOnClient = true;
+		MotionAvatar ->AlwaysLoadOnServer = true;
+		MotionAvatar ->bOwnerNoSee = false;
+		MotionAvatar ->bAffectDynamicIndirectLighting = true;
+		MotionAvatar ->PrimaryComponentTick.TickGroup = TG_PrePhysics;
+		MotionAvatar ->bGenerateOverlapEvents = true;
+		this->MotionAvatar->bVisible = false;
 	}
 
-	this->avatar->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
+	// static
+	this->StaticAvatar = CreateOptionalDefaultSubobject<ULvlPaperSpriteComponent>("StaticAvatar");
+	if (this->StaticAvatar) 
+	{
+		StaticAvatar->AlwaysLoadOnClient = true;
+		StaticAvatar->AlwaysLoadOnServer = true;
+		StaticAvatar->bOwnerNoSee = false;
+		StaticAvatar->bAffectDynamicIndirectLighting = true;
+		StaticAvatar->PrimaryComponentTick.TickGroup = TG_PrePhysics;
+		StaticAvatar->bGenerateOverlapEvents = true;
+	}
+
+
+	this->MotionAvatar ->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
 
 	// collision box
 	this->collidingBox = CreateOptionalDefaultSubobject<UBoxComponent>("CollsionBox");
@@ -47,44 +62,34 @@ AEmployee::AEmployee()
 	this->addSkill(ESkill(FMath::RandRange(0, 8)));
 	this->addSkill(ESkill(FMath::RandRange(0, 8)));
 	this->satisfaction = FMath::RandRange(0.5f, 0.8f);
+
+	originalPositon = this->GetActorLocation();
 }
 
-AEmployee::AEmployee(EBodyCondition _bCon, EHealthCondition _hCon, int _age, float _maxStamina, float exp, TArray<ESkill> _skills)
-{
-	PrimaryActorTick.bCanEverTick = true;
-
-	// flipbook component init
-	this->avatar = CreateOptionalDefaultSubobject<UPaperFlipbookComponent>("avatar");
-	if (this->avatar) 
-	{
-		avatar->AlwaysLoadOnClient = true;
-		avatar->AlwaysLoadOnServer = true;
-		avatar->bOwnerNoSee = false;
-		avatar->bAffectDynamicIndirectLighting = true;
-		avatar->PrimaryComponentTick.TickGroup = TG_PrePhysics;
-		avatar->bGenerateOverlapEvents = true;
-	}
-
-	// disable all rotations
-	this->bUseControllerRotationYaw = false;
-	this->bUseControllerRotationPitch = false;
-	this->bUseControllerRotationRoll = false;
-
-	// parameter set
-	setBodyCondition(_bCon);
-	setHealthCondition(_hCon);
-	setAge(_age);
-	setMaximumStamina(_maxStamina);
-	setStamina(_maxStamina);
-	setExperience(exp);
-	this->skills.Append(_skills);
-	this->satisfaction = FMath::RandRange(0.5f, 0.8f);
-
-}
 
 void AEmployee::updateSatisfaction(float averageWorkingPercentage)
 {
 	this->satisfaction = (salary / expectSalary) * 0.5f + (1 - averageWorkingPercentage)*0.5f;
+}
+
+void AEmployee::CharacterFaceRight()
+{
+	this->StaticAvatar->SetSprite(this->StaticRight);
+}
+
+void AEmployee::CharacterFaceLeft()
+{
+	this->StaticAvatar->SetSprite(this->StaticLeft);
+}
+
+void AEmployee::CharacterFaceUp()
+{
+	this->StaticAvatar->SetSprite(this->StaticUp);
+}
+
+void AEmployee::CharacterFaceDown()
+{
+	this->StaticAvatar->SetSprite(this->StaticDown);
 }
 
 bool AEmployee::removeSkill(ESkill skill)
@@ -166,6 +171,58 @@ void AEmployee::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	FVector newLocation = this->GetActorLocation();
+
+	if (newLocation != originalPositon)
+	{
+		inMotion = true;
+		FVector diff = newLocation - originalPositon;
+		if (FMath::Abs(diff.X) > FMath::Abs(diff.Y))
+		{
+			if (diff.X > 0)
+			{
+				// face right
+				this->MotionAvatar->SetFlipbook(MotionRight);
+				this->StaticAvatar->SetSprite(StaticRight);
+			}
+			else if (diff.X < 0)
+			{
+				// face left
+				this->MotionAvatar->SetFlipbook(MotionLeft);
+				this->StaticAvatar->SetSprite(StaticLeft);
+			}
+		}
+		else
+		{
+			if (diff.Y > 0)
+			{
+				// face down
+				this->MotionAvatar->SetFlipbook(MotionDown);
+				this->StaticAvatar->SetSprite(StaticDown);
+			}
+			else if (diff.Y < 0)
+			{
+				// face up
+				this->MotionAvatar->SetFlipbook(MotionUp);
+				this->StaticAvatar->SetSprite(StaticUp);
+			}
+		}
+	}
+	else 
+	{
+		inMotion = false;
+	}
+
+	if (inMotion) 
+	{
+		this->MotionAvatar->bVisible = true;
+		this->StaticAvatar->bVisible = false;
+	}
+	else 
+	{
+		this->MotionAvatar->bVisible = false;
+		this->StaticAvatar->bVisible = true;
+	}
 }
 
 // Called to bind functionality to input
