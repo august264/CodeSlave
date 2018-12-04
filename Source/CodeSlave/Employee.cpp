@@ -213,16 +213,16 @@ void AEmployee::Tick(float DeltaTime)
 		inMotion = false;
 	}
 
-	if (inMotion) 
-	{
-		this->MotionAvatar->bVisible = true;
-		this->StaticAvatar->bVisible = false;
-	}
-	else 
-	{
-		this->MotionAvatar->bVisible = false;
-		this->StaticAvatar->bVisible = true;
-	}
+	//if (inMotion) 
+	//{
+	//	this->MotionAvatar->bVisible = true;
+	//	this->StaticAvatar->bVisible = false;
+	//}
+	//else 
+	//{
+	//	this->MotionAvatar->bVisible = false;
+	//	this->StaticAvatar->bVisible = true;
+	//}
 }
 
 // Called to bind functionality to input
