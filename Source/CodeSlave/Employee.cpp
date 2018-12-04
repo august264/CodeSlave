@@ -255,3 +255,20 @@ void AEmployee::updateWorkingEfficiency()
 	this->efficiency =  0.9943f * this->stamina - 0.4023f;
 }
 
+
+
+
+// 0 is female, 1 is male
+void AEmployee::setEmployeeName(int gender) {
+
+	if (gender == 0) {
+		this->employeeName = FString(TEXT("Shanshan"));
+	
+	}
+
+	else if (gender == 1) {
+		this->employeeName = FString(TEXT("Vincent"));
+	}
+
+
+}

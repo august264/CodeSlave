@@ -163,6 +163,9 @@ private:
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Params", meta = (AllowPrivateAccess = true))
 		float expectSalary;
 
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Params", meta = (AllowPrivateAccess = true))
+		FString employeeName;
+
 public:
 	// getters and setters
 
@@ -279,6 +282,11 @@ public:
 	// @return the new efficiency
 	UFUNCTION(BlueprintCallable)
 		float getWorkingEfficiency() { return this->efficiency; };
+
+
+	// set employee name
+	UFUNCTION(BlueprintCallable)
+		void setEmployeeName(int gender);
 	
 
 protected:
