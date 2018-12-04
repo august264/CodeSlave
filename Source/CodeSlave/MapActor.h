@@ -21,14 +21,6 @@
 //	 object;
 //};
 
-USTRUCT(BlueprintType, Blueprintable)
-struct FMapData_Row
-{
-	GENERATED_BODY()
-	// the key to access the TileObject
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<FString> MapRow;
-};
 
 UCLASS()
 class CODESLAVE_API AMapActor : public AActor
@@ -40,8 +32,8 @@ private:
 		TArray<ATileObject*> spawnedActorManager;
 
 	// Need to set for editable to overcome a UE4 bug.
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = mapData, meta = (AllowPrivateAccess = true, DisplayName = "Map Data (Do not edit !! Detail in c++ file)"))
-		TArray<FMapData_Row> mapData;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = mapData, meta = (AllowPrivateAccess = true, DisplayName = "Map Data (Do not edit !! Detail in c++ file)"))
+		//TArray<FMapData_Row> mapData;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = mapData, meta = (AllowPrivateAccess = true))
 		TMap<FString, TSubclassOf<ATileObject>> tileObjects;
@@ -67,8 +59,8 @@ protected:
 	virtual void BeginPlay() override;
 
 	// Blueprint function, used to generate maps
-	UFUNCTION(BlueprintCallable)
-		void GenerateMap();
+	//UFUNCTION(BlueprintCallable)
+		//void GenerateMap();
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 		void spawnTile();
@@ -80,8 +72,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	// Debug functions
-	UFUNCTION(BlueprintCallable)
-		void printCurrentMapData();
+	//UFUNCTION(BlueprintCallable)
+		//void printCurrentMapData();
 
 	
 	
