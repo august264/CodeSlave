@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "LvlPaperSpriteComponent.h"
+#include "PaperTileMapComponent.h"
 #include "TileObject.generated.h"
 
 UCLASS()
@@ -21,16 +21,11 @@ private:
 		class USceneComponent* rootScene;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Sprite, meta = (AllowPrivateAccess = true))
-		class ULvlPaperSpriteComponent* sprite;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Box, meta = (AllowPrivateAccess = true))
-		class UBoxComponent* box;
+		class UPaperTileMapComponent* objectSprite;
 
 public:	
 	// Sets default values for this actor's properties
 	ATileObject();
-
-	FORCEINLINE ULvlPaperSpriteComponent* GetPaperSpriteComponent() { return this->sprite; }
 
 protected:
 	// Called when the game starts or when spawned

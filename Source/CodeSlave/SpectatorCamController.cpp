@@ -22,7 +22,6 @@ void ASpectatorCamController::Tick(float DeltaTime)
 void ASpectatorCamController::setObjToBuild(ATileObject * obj)
 {
 	this->objToBuild = obj;
-	this->objToBuild->GetPaperSpriteComponent()->SetSpriteColor(FLinearColor::Green);
 	this->pendingObjectToBuild = true;
 }
 

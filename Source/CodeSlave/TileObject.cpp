@@ -13,11 +13,8 @@ ATileObject::ATileObject()
 	rootScene = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	RootComponent = rootScene;
 
-	sprite = CreateDefaultSubobject<ULvlPaperSpriteComponent>(TEXT("Sprite"));
-	sprite->AttachToComponent(rootScene, FAttachmentTransformRules::SnapToTargetIncludingScale);
+	this->objectSprite = CreateDefaultSubobject<UPaperTileMapComponent>(TEXT("Object"));
 
-	box = CreateDefaultSubobject<UBoxComponent>(TEXT("BoundingBox"));
-	box->AttachToComponent(rootScene, FAttachmentTransformRules::SnapToTargetIncludingScale);
 	
 }
 
