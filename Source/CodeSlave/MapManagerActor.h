@@ -65,6 +65,9 @@ public:
 		FVector getTileWorldPositon(int x, int y);
 
 	UFUNCTION(BlueprintCallable)
+		FVector2D getTileIndexFromWorldPosition(FVector pos);
+
+	UFUNCTION(BlueprintCallable)
 		void TileMapSetUp();
 
 	UFUNCTION(BlueprintCallable)

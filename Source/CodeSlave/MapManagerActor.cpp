@@ -65,6 +65,17 @@ FVector AMapManagerActor::getTileWorldPositon(int x, int y)
 	return location;
 }
 
+FVector2D AMapManagerActor::getTileIndexFromWorldPosition(FVector pos)
+{
+	FVector actorLoc = this->GetActorLocation();
+	FVector diff = pos - actorLoc;
+	FVector2D result = FVector2D(0, 0);
+
+	return FVector2D();
+}
+
+
+
 void AMapManagerActor::TileMapSetUp()
 {
 	gridLine->CreateNewTileMap(mapSizeX, mapSizeY, tileSize, tileSize);
