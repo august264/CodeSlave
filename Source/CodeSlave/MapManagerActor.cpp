@@ -2,6 +2,7 @@
 
 #include "MapManagerActor.h"
 #include "ConstructorHelpers.h"
+#include "GameModeBasic.h"
 
 // Sets default values
 AMapManagerActor::AMapManagerActor()
@@ -67,11 +68,18 @@ FVector AMapManagerActor::getTileWorldPositon(int x, int y)
 
 FVector2D AMapManagerActor::getTileIndexFromWorldPosition(FVector pos)
 {
+	// Calculate the tile index for given in world location;
 	FVector actorLoc = this->GetActorLocation();
 	FVector diff = pos - actorLoc;
 	FVector2D result = FVector2D(0, 0);
+	AGameModeBasic* gameMode = (AGameModeBasic*)GetWorld()->GetAuthGameMode();
 
-	return FVector2D();
+	if (gameMode) 
+	{
+		result.X = FMath::FloorToInt((diff.X + gameMode->getTileSizeX() / 2 )/ gameMode->getTileSizeX());
+		result.Y = FMath::FloorToInt((diff.Y + gameMode->getTileSizeY() / 2 )/ gameMode->getTileSizeY());
+	}
+	return result;
 }
 
 

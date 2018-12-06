@@ -14,7 +14,7 @@ ATileObject::ATileObject()
 	RootComponent = rootScene;
 
 	this->objectSprite = CreateDefaultSubobject<UPaperTileMapComponent>(TEXT("Object"));
-
+	this->objectSprite->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 	
 }
 
