@@ -14,37 +14,19 @@ AEmployee::AEmployee()
 	inMotion = false;
 
 	// animation
-	this->MotionAvatar = CreateOptionalDefaultSubobject<UPaperFlipbookComponent>("avatar");
+	this->MotionAvatar = CreateDefaultSubobject<UPaperFlipbookComponent>("avatar");
 	if (this->MotionAvatar)
 	{
-		MotionAvatar ->AlwaysLoadOnClient = true;
-		MotionAvatar ->AlwaysLoadOnServer = true;
-		MotionAvatar ->bOwnerNoSee = false;
-		MotionAvatar ->bAffectDynamicIndirectLighting = true;
-		MotionAvatar ->PrimaryComponentTick.TickGroup = TG_PrePhysics;
-		MotionAvatar ->bGenerateOverlapEvents = true;
 		this->MotionAvatar->bVisible = false;
 	}
 
-	// static
-	this->StaticAvatar = CreateOptionalDefaultSubobject<ULvlPaperSpriteComponent>("StaticAvatar");
-	if (this->StaticAvatar) 
-	{
-		StaticAvatar->AlwaysLoadOnClient = true;
-		StaticAvatar->AlwaysLoadOnServer = true;
-		StaticAvatar->bOwnerNoSee = false;
-		StaticAvatar->bAffectDynamicIndirectLighting = true;
-		StaticAvatar->PrimaryComponentTick.TickGroup = TG_PrePhysics;
-		StaticAvatar->bGenerateOverlapEvents = true;
-	}
 
-
-	this->MotionAvatar ->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
+	this->MotionAvatar ->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 
 	// collision box
-	this->collidingBox = CreateOptionalDefaultSubobject<UBoxComponent>("CollsionBox");
+	this->collidingBox = CreateDefaultSubobject<UBoxComponent>("CollsionBox");
 
-	this->collidingBox->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
+	this->collidingBox->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	
 
 	// disable all rotations
@@ -74,22 +56,21 @@ void AEmployee::updateSatisfaction(float averageWorkingPercentage)
 
 void AEmployee::CharacterFaceRight()
 {
-	this->StaticAvatar->SetSprite(this->StaticRight);
+
 }
 
 void AEmployee::CharacterFaceLeft()
 {
-	this->StaticAvatar->SetSprite(this->StaticLeft);
 }
 
 void AEmployee::CharacterFaceUp()
 {
-	this->StaticAvatar->SetSprite(this->StaticUp);
+
 }
 
 void AEmployee::CharacterFaceDown()
 {
-	this->StaticAvatar->SetSprite(this->StaticDown);
+
 }
 
 bool AEmployee::removeSkill(ESkill skill)
@@ -183,13 +164,13 @@ void AEmployee::Tick(float DeltaTime)
 			{
 				// face right
 				this->MotionAvatar->SetFlipbook(MotionRight);
-				this->StaticAvatar->SetSprite(StaticRight);
+
 			}
 			else if (diff.X < 0)
 			{
 				// face left
 				this->MotionAvatar->SetFlipbook(MotionLeft);
-				this->StaticAvatar->SetSprite(StaticLeft);
+
 			}
 		}
 		else
@@ -198,13 +179,13 @@ void AEmployee::Tick(float DeltaTime)
 			{
 				// face down
 				this->MotionAvatar->SetFlipbook(MotionDown);
-				this->StaticAvatar->SetSprite(StaticDown);
+
 			}
 			else if (diff.Y < 0)
 			{
 				// face up
 				this->MotionAvatar->SetFlipbook(MotionUp);
-				this->StaticAvatar->SetSprite(StaticUp);
+
 			}
 		}
 	}

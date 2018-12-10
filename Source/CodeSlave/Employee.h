@@ -7,7 +7,6 @@
 #include "PaperFlipbookComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/SceneComponent.h"
-#include "LvlPaperSpriteComponent.h"
 #include "Employee.generated.h"
 
 UENUM(BlueprintType)
@@ -72,9 +71,6 @@ private:
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Avatar", meta = (AllowPrivateAccess = true))
 		UPaperFlipbook* MotionRight;
 
-	UPROPERTY(VisibleAnyWhere, BlueprintReadWrite, Category = "Avatar", meta = (AllowPrivateAccess = true))
-		ULvlPaperSpriteComponent* StaticAvatar;
-
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Avatar", meta = (AllowPrivateAccess = true))
 		UPaperSprite* StaticUp;
 
@@ -99,8 +95,6 @@ private:
 public:
 	// FORCEINLINE GET FUNCTIONS
 	FORCEINLINE class UPaperFlipbookComponent* getPaperFlipbookComponent() { return MotionAvatar; }
-	FORCEINLINE class ULvlPaperSpriteComponent* getPaperSpriteComponent() { return StaticAvatar; }
-	FORCEINLINE class UBoxComponent* getBoxComponent() { return collidingBox; }
 	FORCEINLINE class USceneComponent* getSceneComponent() { return sceneComponent; }
 
 private:
