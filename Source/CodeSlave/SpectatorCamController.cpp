@@ -33,6 +33,9 @@ void ASpectatorCamController::SetupInputComponent()
 
 	InputComponent->BindAction("MidMousePressed", IE_Pressed, this, &ASpectatorCamController::midMousePressed);
 	InputComponent->BindAction("MidMouseReleased", IE_Released, this, &ASpectatorCamController::midMouseReleased);
+
+	InputComponent->BindAction("ZoomIn", IE_Pressed, this, &ASpectatorCamController::zoomIn);
+	InputComponent->BindAction("ZoomOut", IE_Pressed, this, &ASpectatorCamController::zoomOut);
 }
 
 void ASpectatorCamController::midMousePressed()
@@ -48,6 +51,18 @@ void ASpectatorCamController::midMouseReleased()
 	UE_LOG(LogTemp, Log, TEXT("mouse mid button released"));
 	ASpectatorCamera* cam = (ASpectatorCamera*)Super::GetPawn();
 	cam->toggleMidButtonPress();
+}
+
+void ASpectatorCamController::zoomIn()
+{
+	ASpectatorCamera* cam = (ASpectatorCamera*)Super::GetPawn();
+	cam->decreaseOrthoWidth();
+}
+
+void ASpectatorCamController::zoomOut()
+{
+	ASpectatorCamera* cam = (ASpectatorCamera*)Super::GetPawn();
+	cam->increaseOrthoWidth();
 }
 
 

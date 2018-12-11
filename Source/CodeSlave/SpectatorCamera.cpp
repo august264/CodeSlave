@@ -32,6 +32,8 @@ ASpectatorCamera::ASpectatorCamera()
 
 	this->mouseMidButtonPressed = false;
 
+	this->zoomSpeed = 10.0f;
+
 
 }
 
@@ -135,6 +137,18 @@ void ASpectatorCamera::updateMousePosition()
 	{
 		this->mouseOriginalPos = mousePos;
 	}
+}
+
+void ASpectatorCamera::increaseOrthoWidth()
+{
+	float width = TopDownCameraComponent->OrthoWidth;
+	this->TopDownCameraComponent->SetOrthoWidth(width + zoomSpeed);
+}
+
+void ASpectatorCamera::decreaseOrthoWidth()
+{
+	float width = TopDownCameraComponent->OrthoWidth;
+	this->TopDownCameraComponent->SetOrthoWidth(width - zoomSpeed);
 }
 
 

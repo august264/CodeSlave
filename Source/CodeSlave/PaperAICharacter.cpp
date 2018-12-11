@@ -8,17 +8,16 @@ APaperAICharacter::APaperAICharacter()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	this->CharacterMovement = CreateDefaultSubobject<UCharacterMovementComponent>("Character Movement");
+	this->CharacterMovement = CreateDefaultSubobject<UPawnMovementComponent>("Character Movement");
 
-	this->rootScene = CreateDefaultSubobject<USceneComponent>("Root Scene");
-	RootComponent = rootScene;
+	this->collisionSphere = CreateDefaultSubobject<USphereComponent>("Collision Shpere");
+	RootComponent = this->collisionSphere;
 
 	this->motionAvatar = CreateDefaultSubobject<UPaperFlipbookComponent>("Motion Avatar");
 	this->motionAvatar->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	this->staticAvatar = CreateDefaultSubobject<UPaperSpriteComponent>("Static Avatar");
 	this->staticAvatar->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
-	this->collisionSphere = CreateDefaultSubobject<USphereComponent>("Collision Shpere");
-	this->collisionSphere->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	
 
 	// init TMaps for flipbooks and sprites
 	motionFlipbooks.Add(FString("Walk_Up"));
@@ -36,7 +35,6 @@ APaperAICharacter::APaperAICharacter()
 void APaperAICharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame

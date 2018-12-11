@@ -34,6 +34,9 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 		class USceneComponent* scene;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Settings", meta = (AllowPrivateAccess = true))
+		float zoomSpeed;
+
 	bool mouseMidButtonPressed;
 	
 public:
@@ -75,4 +78,8 @@ public:
 
 	UFUNCTION(blueprintCallable)
 		void updateMousePosition();
+
+	void increaseOrthoWidth();
+
+	void decreaseOrthoWidth();
 };

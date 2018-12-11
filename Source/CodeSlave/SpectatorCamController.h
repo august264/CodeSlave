@@ -38,4 +38,9 @@ private:
 
 	void midMouseReleased();
 
+	UFUNCTION(BlueprintCallable)
+	void zoomIn();
+
+	UFUNCTION(BlueprintCallable)
+	void zoomOut();
 };

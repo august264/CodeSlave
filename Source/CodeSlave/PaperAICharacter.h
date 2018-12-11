@@ -18,10 +18,7 @@ class CODESLAVE_API APaperAICharacter : public APawn
 		// essential components
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Movement, meta = (AllowPrivateAccess = true))
-		UCharacterMovementComponent* CharacterMovement;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = RootScene, meta = (AllowPrivateAccess = true))
-		USceneComponent* rootScene;
+		UPawnMovementComponent* CharacterMovement;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Avatar, meta = (AllowPrivateAccess = true))
 		UPaperFlipbookComponent* motionAvatar;
