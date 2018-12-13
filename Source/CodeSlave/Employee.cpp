@@ -2,7 +2,7 @@
 
 #include "Employee.h"
 
-
+/*
 // Sets default values
 AEmployee::AEmployee()
 {
@@ -253,3 +253,4 @@ void AEmployee::setEmployeeName(int gender) {
 
 
 }
+*/

@@ -3,14 +3,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Pawn.h"
-#include "PaperFlipbookComponent.h"
-#include "Components/BoxComponent.h"
-#include "Components/SceneComponent.h"
-#include "Employee.generated.h"
-/*
+#include "TESTAICharacter.h"
+#include "GameEmployee.generated.h"
+
+/**
+ * 
+ */
+
 UENUM(BlueprintType)
-enum class  EHealthCondition : uint8 
+enum class  EHealthCondition : uint8
 {
 	EHealth_ill,
 	EHealth_health,
@@ -40,71 +41,23 @@ enum class ESkill :uint8
 	E_SKILL_IOS,
 	E_SKILL_NULL
 
-};*/
+};
 
 UCLASS()
-class CODESLAVE_API AEmployee : public APawn
+class CODESLAVE_API AGameEmployee : public ATESTAICharacter
 {
 	GENERATED_BODY()
-/*
+	
 public:
-	// Sets default values for this pawn's properties
-	AEmployee();
+	AGameEmployee();
 
-private:
-
-	// Character component
-
-	// flipbook
-	UPROPERTY(VisibleAnyWhere, BlueprintReadWrite, Category = "Avatar", meta = (AllowPrivateAccess = true))
-		UPaperFlipbookComponent* MotionAvatar;
-
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Avatar", meta = (AllowPrivateAccess = true))
-		UPaperFlipbook* MotionUp;
-
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Avatar", meta = (AllowPrivateAccess = true))
-		UPaperFlipbook* MotionDown;
-
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Avatar", meta = (AllowPrivateAccess = true))
-		UPaperFlipbook* MotionLeft;
-
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Avatar", meta = (AllowPrivateAccess = true))
-		UPaperFlipbook* MotionRight;
-
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Avatar", meta = (AllowPrivateAccess = true))
-		UPaperSprite* StaticUp;
-
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Avatar", meta = (AllowPrivateAccess = true))
-		UPaperSprite* StaticDown;
-
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Avatar", meta = (AllowPrivateAccess = true))
-		UPaperSprite* StaticLeft;
-
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Avatar", meta = (AllowPrivateAccess = true))
-		UPaperSprite* StaticRight;
-
-	// collision box
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Collision", meta = (AllowPrivateAccess = true))
-		UBoxComponent* collidingBox;
-
-	// scene root
-	UPROPERTY(BlueprintReadOnly, Category = "Scene", meta = (AllowPrivateAccess = true))
-		USceneComponent* sceneComponent;
-
+protected:
+	virtual void BeginPlay() override;
 
 public:
-	// FORCEINLINE GET FUNCTIONS
-	FORCEINLINE class UPaperFlipbookComponent* getPaperFlipbookComponent() { return MotionAvatar; }
-	FORCEINLINE class USceneComponent* getSceneComponent() { return sceneComponent; }
-
+	virtual void Tick(float DeltaTime) override;
+	
 private:
-
-	bool inMotion;
-
-	FVector originalPositon;
-
-	UFUNCTION(BlueprintCallable) 
-		void setInMotion(bool val) { inMotion = val; }
 
 	// parameters
 
@@ -168,7 +121,7 @@ public:
 		float getExpectSalary() { return this->expectSalary; }
 	UFUNCTION(BlueprintCallable)
 		void setExpectSalary(float _expectSalary) { this->expectSalary = _expectSalary; }
-	
+
 
 	// satisfaction
 	UFUNCTION(BlueprintCallable)
@@ -178,18 +131,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void updateSatisfaction(float averageWorkingPercentage);
 
-	// Set the character facing rightward(static)
-	UFUNCTION(BlueprintCallable)
-		void CharacterFaceRight();
-	// Set the character facing leftward(static)
-	UFUNCTION(BlueprintCallable)
-		void CharacterFaceLeft();
-	// Set the character facing upward(static)
-	UFUNCTION(BlueprintCallable)
-		void CharacterFaceUp();
-	// Set the character facing downward(static)
-	UFUNCTION(BlueprintCallable)
-		void CharacterFaceDown();
 
 
 	// skills
@@ -214,7 +155,7 @@ public:
 		float getSalary() { return this->salary; }
 	UFUNCTION(BlueprintCallable)
 		void setSalary(float newSalary) { this->salary = newSalary >= 0 ? newSalary : this->salary; }
-	
+
 	// age
 	UFUNCTION(BlueprintCallable)
 		int getAge() { return this->age; }
@@ -224,7 +165,7 @@ public:
 	// grow 1 year
 	UFUNCTION(BlueprintCallable)
 		void updateAge() { this->age += 1; }
-	
+
 
 	// stamina
 	UFUNCTION(BlueprintCallable)
@@ -264,7 +205,7 @@ public:
 		void setBoldness(float val) { this->boldness = val >= 0 && val <= 1 ? val : this->boldness; }
 	UFUNCTION(BlueprintCallable)
 		void updateBoldness(float averageWorkingHr);
-	
+
 	// experience
 	UFUNCTION(BlueprintCallable)
 		float getExperience() { return this->exp; }
@@ -281,20 +222,7 @@ public:
 	// set employee name
 	UFUNCTION(BlueprintCallable)
 		void setEmployeeName(int gender);
-	
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-private:
 	// utils functions
 
 	// calculate the stamina restore efficiency based on ages
@@ -305,5 +233,4 @@ private:
 
 	// hour sleep tracker, when weak up, reset the timer to zero, when sleep, add 1 to the timer every in game time unit
 	float sleepTimer;
-	*/
 };
