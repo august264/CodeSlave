@@ -21,6 +21,15 @@ ATESTAICharacter::ATESTAICharacter()
 	changeMotion = true;
 }
 
+void ATESTAICharacter::excuteAction(FString action)
+{
+	// if motion exist
+	if (AvatarFlipbooks[action] != nullptr) 
+	{
+		this->GetSprite()->SetFlipbook(AvatarFlipbooks[action]);
+	}
+}
+
 void ATESTAICharacter::BeginPlay()
 {
 	Super::BeginPlay();

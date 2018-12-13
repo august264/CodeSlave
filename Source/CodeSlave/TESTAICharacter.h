@@ -41,6 +41,9 @@ protected:
 public:
 	ATESTAICharacter();
 
+	UFUNCTION(BlueprintCallable)
+		void excuteAction(FString action);
+
 protected:
 	virtual void BeginPlay() override;
 

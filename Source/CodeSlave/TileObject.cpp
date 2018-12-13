@@ -16,6 +16,8 @@ ATileObject::ATileObject()
 	this->objectSprite = CreateDefaultSubobject<UPaperTileMapComponent>(TEXT("Object"));
 	this->objectSprite->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 	
+	this->targetPoint = CreateDefaultSubobject<UBillboardComponent>(TEXT("TargetPoint"));
+	this->targetPoint->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
 }
 
 // Called when the game starts or when spawned
