@@ -93,7 +93,7 @@ void ASpectatorCamController::rightMouseButtonPressed()
 {
 	UE_LOG(LogTemp, Log, TEXT("mouse right button pressed"));
 	ObjOrignialPosition = objToBuild->GetTransform().GetLocation();
-	if (objToBuild->getTileObjectType == "Floor")
+	if (objToBuild->getTileObjectType() == "Floor")
 	{
 		objPositionTracking = true;
 	}
@@ -103,7 +103,7 @@ void ASpectatorCamController::rightMouseButtonReleased()
 {
 	UE_LOG(LogTemp, Log, TEXT("mouse right button released"));
 
-	if (objToBuild->getTileObjectType != "Floor" || objToBuild->getTileObjectType != "Wall") 
+	if (objToBuild->getTileObjectType() != "Floor" || objToBuild->getTileObjectType() != "Wall") 
 	{
 		FActorSpawnParameters params;
 		const FTransform trans = objToBuild->GetTransform();
