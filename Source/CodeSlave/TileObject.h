@@ -48,6 +48,8 @@ public:
 	// Sets default values for this actor's properties
 	ATileObject();
 
+	FORCEINLINE UPaperTileMapComponent* getSprite() { return this->objectSprite; }
+
 	FORCEINLINE UBillboardComponent* getTargetPoint() { return targetPoint; }
 
 protected:

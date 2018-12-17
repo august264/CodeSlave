@@ -94,3 +94,15 @@ void AMapManagerActor::TileMapSetUp()
 	//gridLine->bVisible = false;
 }
 
+void AMapManagerActor::clearTileMap()
+{
+	
+	for (int i = 0; i < mapSizeX; i++)
+	{
+		for (int j = 0; j < mapSizeY; j++)
+		{
+			baseFloor->SetTile(i, j, 0, FPaperTileInfo());
+		}
+	}
+}
+

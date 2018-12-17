@@ -52,11 +52,15 @@ private:
 		TSubclassOf<AMapManagerActor> mapToSpawn;
 
 	// a place holder to hold current map actor
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = InGameData, meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InGameData, meta = (AllowPrivateAccess = true))
 		AMapManagerActor* currentInGameMap;
 
 private:
 	// Function blocks
 	// BeginPlay, spawn the tile map actor
 	void spawnMap();
+
+public:
+	UFUNCTION(BlueprintCallable)
+		AMapManagerActor* getCurrentInGameMap() { return this->currentInGameMap; }
 };

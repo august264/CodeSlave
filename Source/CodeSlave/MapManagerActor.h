@@ -72,6 +72,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		void ToggleGrid(bool val) { this->gridLine->bVisible = val; };
+
+	void clearTileMap();
 	
 	
 };

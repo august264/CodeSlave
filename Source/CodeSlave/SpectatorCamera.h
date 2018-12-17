@@ -77,6 +77,9 @@ public:
 		void toggleMidButtonPress() { this->mouseMidButtonPressed = !this->mouseMidButtonPressed; }
 
 	UFUNCTION(blueprintCallable)
+		void toggleRightButtonPress() { this->mouseRightButtonPressed = !this->mouseRightButtonPressed; }
+
+	UFUNCTION(blueprintCallable)
 		void updateMousePosition();
 
 	void increaseOrthoWidth();

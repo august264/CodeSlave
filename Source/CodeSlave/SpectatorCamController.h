@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "TileObject.h"
+#include "MapManagerActor.h"
 #include "SpectatorCamController.generated.h"
 
 /**
@@ -25,9 +26,22 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void setObjToBuild(ATileObject* obj);
 
+	UPROPERTY(BlueprintReadOnly)
+		FVector ObjOrignialPosition;
+
+	FVector2D lastTickEndIndex;
+
+private:
+	AMapManagerActor * mapActor;
+
+	TArray<FVector2D> selectedTiles;
+
 protected:
+	bool objPositionTracking;
+
 	bool pendingObjectToBuild;
 
+	UPROPERTY(BlueprintReadWrite)
 	ATileObject* objToBuild;
 
 protected:
@@ -37,6 +51,14 @@ private:
 	void midMousePressed();
 
 	void midMouseReleased();
+
+	void rightMouseButtonPressed();
+
+	void rightMouseButtonReleased();
+
+	void leftMouseButtonPressed();
+
+	void leftMouseButtonReleased();
 
 	UFUNCTION(BlueprintCallable)
 	void zoomIn();
