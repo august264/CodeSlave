@@ -31,10 +31,12 @@ public:
 
 	FVector2D lastTickEndIndex;
 
+	
+
 private:
 	AMapManagerActor * mapActor;
 
-	TArray<FVector2D> selectedTiles;
+	TArray<FVector2D> indexArray;
 
 protected:
 	bool objPositionTracking;

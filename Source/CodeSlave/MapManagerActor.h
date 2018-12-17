@@ -38,6 +38,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = MapUtility, meta = (AllowPrivateAccess = true))
 		class UPaperTileMapComponent* baseFloor;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = MapUtility, meta = (AllowPrivateAccess = true))
+		class UPaperTileMapComponent* constructionLayer;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MapData, meta = (AllowPrivateAccess = true))
 		TMap<FString, TSubclassOf<ATileObject>> spawnableObjects;
 
@@ -50,7 +53,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Scene, meta = (AllowPrivateAccess = true))
 		class USceneComponent* rootScene;
 
-	
+
 
 protected:
 	// Called when the game starts or when spawned

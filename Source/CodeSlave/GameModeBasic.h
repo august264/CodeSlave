@@ -51,6 +51,7 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InGameData, meta = (AllowPrivateAccess = true))
 		TSubclassOf<AMapManagerActor> mapToSpawn;
 
+public:
 	// a place holder to hold current map actor
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InGameData, meta = (AllowPrivateAccess = true))
 		AMapManagerActor* currentInGameMap;

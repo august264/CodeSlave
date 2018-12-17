@@ -29,20 +29,37 @@ void ASpectatorCamController::Tick(float DeltaTime)
 		
 		FVector2D startIndex = mapActor->getTileIndexFromWorldPosition(ObjOrignialPosition);
 		FVector2D endIndex = mapActor->getTileIndexFromWorldPosition(objToBuild->GetTransform().GetLocation());
+		FVector2D currentIndex = mapActor->getTileIndexFromWorldPosition(objToBuild->GetTransform().GetLocation());
 
-		if (lastTickEndIndex != endIndex)
+		if (startIndex.X > endIndex.X) 
+		{
+			int tmp = endIndex.X;
+			endIndex.X = startIndex.X;
+			startIndex.X = tmp;
+		}
+
+		if (startIndex.Y > endIndex.Y) 
+		{
+			int tmp = endIndex.Y;
+			endIndex.Y = startIndex.Y;
+			startIndex.Y = tmp;
+		}
+
+		if (lastTickEndIndex != currentIndex)
 		{
 			mapActor->clearTileMap();
-			for (int i = startIndex.X; i < (int)endIndex.X; i++)
+			indexArray.Empty();
+			for (int i = startIndex.X; i <= (int)endIndex.X; i++)
 			{
-				for (int j = startIndex.Y; j < (int)endIndex.Y; j++)
+				for (int j = startIndex.Y; j <= (int)endIndex.Y; j++)
 				{
-					mapActor->baseFloor->SetTile(i, j, 0, tmpInfo);
+					mapActor->constructionLayer->SetTile(i, j, 0, tmpInfo);
+					indexArray.Add(FVector2D(i, j));
 				}
 			}
 		}
 
-		lastTickEndIndex = endIndex;
+		lastTickEndIndex = currentIndex;
 	}
 
 	
@@ -89,41 +106,54 @@ void ASpectatorCamController::midMouseReleased()
 	cam->toggleMidButtonPress();
 }
 
-void ASpectatorCamController::rightMouseButtonPressed()
-{
-	UE_LOG(LogTemp, Log, TEXT("mouse right button pressed"));
-	ObjOrignialPosition = objToBuild->GetTransform().GetLocation();
-	if (objToBuild->getTileObjectType() == "Floor")
-	{
-		objPositionTracking = true;
-	}
-}
-
-void ASpectatorCamController::rightMouseButtonReleased()
-{
-	UE_LOG(LogTemp, Log, TEXT("mouse right button released"));
-
-	if (objToBuild->getTileObjectType() != "Floor" || objToBuild->getTileObjectType() != "Wall") 
-	{
-		FActorSpawnParameters params;
-		const FTransform trans = objToBuild->GetTransform();
-		GetWorld()->SpawnActor<ATileObject>(objToBuild->StaticClass(), trans);
-	}
-	else 
-	{
-		objPositionTracking = false;
-	}
-}
-
 void ASpectatorCamController::leftMouseButtonPressed()
 {
-	if (objToBuild) 
+	if (objToBuild)
 	{
-		objToBuild->Destroyed();
+		UE_LOG(LogTemp, Log, TEXT("mouse left button pressed"));
+		ObjOrignialPosition = objToBuild->GetTransform().GetLocation();
+		if (objToBuild->getTileObjectType() == "Floor")
+		{
+			objPositionTracking = true;
+		}
 	}
 }
 
 void ASpectatorCamController::leftMouseButtonReleased()
+{
+	if (objToBuild)
+	{
+		if (objToBuild->getTileObjectType() != "Floor" && objToBuild->getTileObjectType() != "Wall")
+		{
+			UE_LOG(LogTemp, Log, TEXT("mouse left button released"));
+			FActorSpawnParameters params;
+			params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+			const FTransform trans = objToBuild->GetTransform();
+			GetWorld()->SpawnActor<ATileObject>(objToBuild->GetClass(), trans);
+		}
+		else
+		{
+			FPaperTileInfo tmpInfo = objToBuild->getSprite()->GetTile(0, 0, 0);
+			objPositionTracking = false;
+			mapActor->clearTileMap();
+			for (int i = 0; i < indexArray.Num(); i++)
+			{
+				mapActor->baseFloor->SetTile((int)(indexArray[i].X), (int)(indexArray[i].Y), 0, tmpInfo);
+			}
+		}
+	}
+}
+
+void ASpectatorCamController::rightMouseButtonPressed()
+{
+	if (objToBuild) 
+	{
+
+		objToBuild->Destroy();
+	}
+}
+
+void ASpectatorCamController::rightMouseButtonReleased()
 {
 }
 
