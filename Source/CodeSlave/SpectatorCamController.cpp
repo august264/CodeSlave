@@ -16,53 +16,17 @@ void ASpectatorCamController::BeginPlay()
 	AGameModeBasic* gameMode = (AGameModeBasic*)(GetWorld()->GetAuthGameMode());
 
 	mapActor = gameMode->getCurrentInGameMap();
+
+	objPositionTracking = false;
+	wallConstruction = false;
 }
 
 void ASpectatorCamController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (objPositionTracking) 
-	{
-		// acquire mapActor floor tileMap
-		FPaperTileInfo tmpInfo = objToBuild->getSprite()->GetTile(0, 0, 0);
-		
-		FVector2D startIndex = mapActor->getTileIndexFromWorldPosition(ObjOrignialPosition);
-		FVector2D endIndex = mapActor->getTileIndexFromWorldPosition(objToBuild->GetTransform().GetLocation());
-		FVector2D currentIndex = mapActor->getTileIndexFromWorldPosition(objToBuild->GetTransform().GetLocation());
-
-		if (startIndex.X > endIndex.X) 
-		{
-			int tmp = endIndex.X;
-			endIndex.X = startIndex.X;
-			startIndex.X = tmp;
-		}
-
-		if (startIndex.Y > endIndex.Y) 
-		{
-			int tmp = endIndex.Y;
-			endIndex.Y = startIndex.Y;
-			startIndex.Y = tmp;
-		}
-
-		if (lastTickEndIndex != currentIndex)
-		{
-			mapActor->clearTileMap();
-			indexArray.Empty();
-			for (int i = startIndex.X; i <= (int)endIndex.X; i++)
-			{
-				for (int j = startIndex.Y; j <= (int)endIndex.Y; j++)
-				{
-					mapActor->constructionLayer->SetTile(i, j, 0, tmpInfo);
-					indexArray.Add(FVector2D(i, j));
-				}
-			}
-		}
-
-		lastTickEndIndex = currentIndex;
-	}
-
-	
+	// constructing objects, floors and walls
+	constructionTick();
 
 }
 
@@ -116,6 +80,13 @@ void ASpectatorCamController::leftMouseButtonPressed()
 		{
 			objPositionTracking = true;
 		}
+		else if (objToBuild->getTileObjectType() == "Wall") 
+		{
+			UE_LOG(LogTemp, Log, TEXT("enable wall"));
+			objPositionTracking = true;
+			wallConstruction = true;
+			buildingDirection = FVector2D();
+		}
 	}
 }
 
@@ -135,10 +106,21 @@ void ASpectatorCamController::leftMouseButtonReleased()
 		{
 			FPaperTileInfo tmpInfo = objToBuild->getSprite()->GetTile(0, 0, 0);
 			objPositionTracking = false;
+			wallConstruction = false;
 			mapActor->clearTileMap();
-			for (int i = 0; i < indexArray.Num(); i++)
+			if (objToBuild->getTileObjectType() == "Floor")
 			{
-				mapActor->baseFloor->SetTile((int)(indexArray[i].X), (int)(indexArray[i].Y), 0, tmpInfo);
+				for (int i = 0; i < indexArray.Num(); i++)
+				{
+					mapActor->baseFloor->SetTile((int)(indexArray[i].X), (int)(indexArray[i].Y), 0, tmpInfo);
+				}
+			}
+			else if (objToBuild->getTileObjectType() == "Wall") 
+			{
+				for (int i = 0; i < indexArray.Num(); i++)
+				{
+					mapActor->baseWall->SetTile((int)(indexArray[i].X), (int)(indexArray[i].Y), 0, tmpInfo);
+				}
 			}
 		}
 	}
@@ -167,6 +149,125 @@ void ASpectatorCamController::zoomOut()
 {
 	ASpectatorCamera* cam = (ASpectatorCamera*)Super::GetPawn();
 	cam->increaseOrthoWidth();
+}
+
+void ASpectatorCamController::constructionTick()
+{
+	/* ==========================================
+	player construction code
+	==========================================*/
+
+	// if area build is enabled(build wall or floor)
+	if (objPositionTracking)
+	{
+		// acquire mapActor floor tileMap
+		FPaperTileInfo tmpInfo = objToBuild->getSprite()->GetTile(0, 0, 0);
+
+		FVector2D startIndex = mapActor->getTileIndexFromWorldPosition(ObjOrignialPosition);
+		FVector2D endIndex = mapActor->getTileIndexFromWorldPosition(objToBuild->GetTransform().GetLocation());
+		FVector2D currentIndex = mapActor->getTileIndexFromWorldPosition(objToBuild->GetTransform().GetLocation());
+
+		// if it is not a wall construction, run area construction code
+		if (!wallConstruction)
+		{
+			if (startIndex.X > endIndex.X)
+			{
+				int tmp = endIndex.X;
+				endIndex.X = startIndex.X;
+				startIndex.X = tmp;
+			}
+
+			if (startIndex.Y > endIndex.Y)
+			{
+				int tmp = endIndex.Y;
+				endIndex.Y = startIndex.Y;
+				startIndex.Y = tmp;
+			}
+
+			if (lastTickEndIndex != currentIndex)
+			{
+				mapActor->clearTileMap();
+				indexArray.Empty();
+				for (int i = startIndex.X; i <= (int)endIndex.X; i++)
+				{
+					for (int j = startIndex.Y; j <= (int)endIndex.Y; j++)
+					{
+						mapActor->constructionLayer->SetTile(i, j, 0, tmpInfo);
+						indexArray.Add(FVector2D(i, j));
+					}
+				}
+			}
+		}
+		// if it is a wall construction, run line construction code
+		else if (wallConstruction)
+		{
+
+			if (endIndex == startIndex)
+			{
+				directionFix = false;
+			}
+			else
+			{
+				UE_LOG(LogTemp, Log, TEXT("mouse dragged"));
+				if (!directionFix)
+				{
+
+					directionFix = true;
+					buildingDirection = endIndex - startIndex;
+					directionLog = startIndex;
+					UE_LOG(LogTemp, Log, TEXT("set direction fix to true and log building direction"));
+				}
+				else
+				{
+					if (startIndex.X > endIndex.X)
+					{
+						int tmp = endIndex.X;
+						endIndex.X = startIndex.X;
+						startIndex.X = tmp;
+					}
+
+					if (startIndex.Y > endIndex.Y)
+					{
+						int tmp = endIndex.Y;
+						endIndex.Y = startIndex.Y;
+						startIndex.Y = tmp;
+					}
+
+					UE_LOG(LogTemp, Log, TEXT("enter building mode: %f, %f"), buildingDirection.X, buildingDirection.Y);
+					if (buildingDirection.X != 0)
+					{
+						if (lastTickEndIndex != currentIndex)
+						{
+							mapActor->clearTileMap();
+							indexArray.Empty();
+							for (int i = startIndex.X; i <= (int)endIndex.X; i++)
+							{
+								mapActor->constructionLayer->SetTile(i, directionLog.Y, 0, tmpInfo);
+								indexArray.Add(FVector2D(i, directionLog.Y));
+							}
+						}
+					}
+					else if (buildingDirection.Y != 0)
+					{
+						if (lastTickEndIndex != currentIndex)
+						{
+							mapActor->clearTileMap();
+							indexArray.Empty();
+							for (int i = startIndex.Y; i <= (int)endIndex.Y; i++)
+							{
+								mapActor->constructionLayer->SetTile(directionLog.X, i, 0, tmpInfo);
+								indexArray.Add(FVector2D(directionLog.X, i));
+							}
+						}
+					}
+				}
+			}
+		}
+		lastTickEndIndex = currentIndex;
+	}
+	/*=======================================
+	Player construction code ended
+	=======================================*/
 }
 
 

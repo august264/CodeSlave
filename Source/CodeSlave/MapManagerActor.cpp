@@ -26,6 +26,8 @@ AMapManagerActor::AMapManagerActor()
 	baseFloor->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	constructionLayer = CreateDefaultSubobject<UPaperTileMapComponent>("ConstructionLayer");
 	constructionLayer->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	baseWall = CreateDefaultSubobject<UPaperTileMapComponent>("WallTiles");
+	baseWall->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 
 	ConstructorHelpers::FObjectFinder<UPaperTileSet> obj(TEXT("PaperTileSet'/Game/2DSideScroller/Sprites/TileResource/City/CityTile_TileSet.CityTile_TileSet'"));
 
@@ -91,6 +93,7 @@ void AMapManagerActor::TileMapSetUp()
 	gridLine->CreateNewTileMap(mapSizeX, mapSizeY, tileSize, tileSize);
 	baseFloor->CreateNewTileMap(mapSizeX, mapSizeY, tileSize, tileSize);
 	constructionLayer->CreateNewTileMap(mapSizeX, mapSizeY, tileSize, tileSize);
+	baseWall->CreateNewTileMap(mapSizeX, mapSizeY, tileSize, tileSize);
 	//gridLine->AddRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
 	//baseFloor->AddRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
 

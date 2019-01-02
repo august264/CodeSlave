@@ -38,13 +38,21 @@ private:
 
 	TArray<FVector2D> indexArray;
 
+	FVector2D buildingDirection;
+
+	FVector2D directionLog;
+
 protected:
 	bool objPositionTracking;
 
+	bool wallConstruction;
+
 	bool pendingObjectToBuild;
 
+	bool directionFix;
+
 	UPROPERTY(BlueprintReadWrite)
-	ATileObject* objToBuild;
+		ATileObject* objToBuild;
 
 protected:
 	virtual void SetupInputComponent() override;
@@ -67,4 +75,6 @@ private:
 
 	UFUNCTION(BlueprintCallable)
 	void zoomOut();
+
+	void constructionTick();
 };

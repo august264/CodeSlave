@@ -39,6 +39,9 @@ public:
 		class UPaperTileMapComponent* baseFloor;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = MapUtility, meta = (AllowPrivateAccess = true))
+		class UPaperTileMapComponent* baseWall;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = MapUtility, meta = (AllowPrivateAccess = true))
 		class UPaperTileMapComponent* constructionLayer;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MapData, meta = (AllowPrivateAccess = true))
