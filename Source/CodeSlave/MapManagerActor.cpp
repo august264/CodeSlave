@@ -29,7 +29,7 @@ AMapManagerActor::AMapManagerActor()
 	baseWall = CreateDefaultSubobject<UPaperTileMapComponent>("WallTiles");
 	baseWall->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 
-	ConstructorHelpers::FObjectFinder<UPaperTileSet> obj(TEXT("PaperTileSet'/Game/2DSideScroller/Sprites/TileResource/City/CityTile_TileSet.CityTile_TileSet'"));
+	ConstructorHelpers::FObjectFinder<UPaperTileSet> obj(TEXT("PaperTileSet'/Game/Resources/Sprites/TileResource/City/CityTile_TileSet.CityTile_TileSet'"));
 
 	if (obj.Succeeded()) 
 	{
